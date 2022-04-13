@@ -112,10 +112,6 @@ namespace Silk.NET.OpenCL.Extensions.KHR
         CommandReleaseD3D11ObjectsKhr = 0x4021,
         [NativeName("Name", "CL_DEPTH")]
         Depth = 0x10BD,
-        [NativeName("Name", "CL_UUID_SIZE_KHR")]
-        UuidSizeKhr = 0x16,
-        [NativeName("Name", "CL_LUID_SIZE_KHR")]
-        LuidSizeKhr = 0x8,
         [NativeName("Name", "CL_DEVICE_UUID_KHR")]
         DeviceUuidKhr = 0x106A,
         [NativeName("Name", "CL_DRIVER_UUID_KHR")]
@@ -170,14 +166,6 @@ namespace Silk.NET.OpenCL.Extensions.KHR
         InvalidEglObjectKhr = unchecked((int) 0xFFFFFFFFFFFFFBBB),
         [NativeName("Name", "CL_EGL_RESOURCE_NOT_ACQUIRED_KHR")]
         EglResourceNotAcquiredKhr = unchecked((int) 0xFFFFFFFFFFFFFBBC),
-        [NativeName("Name", "CL_VERSION_MAJOR_BITS_KHR")]
-        VersionMajorBitsKhr = 0x10,
-        [NativeName("Name", "CL_VERSION_MINOR_BITS_KHR")]
-        VersionMinorBitsKhr = 0x10,
-        [NativeName("Name", "CL_VERSION_PATCH_BITS_KHR")]
-        VersionPatchBitsKhr = 0x12,
-        [NativeName("Name", "CL_NAME_VERSION_MAX_NAME_SIZE_KHR")]
-        NameVersionMaxNameSizeKhr = 0x64,
         [NativeName("Name", "CL_PLATFORM_NUMERIC_VERSION_KHR")]
         PlatformNumericVersionKhr = 0x906,
         [NativeName("Name", "CL_PLATFORM_EXTENSIONS_WITH_VERSION_KHR")]

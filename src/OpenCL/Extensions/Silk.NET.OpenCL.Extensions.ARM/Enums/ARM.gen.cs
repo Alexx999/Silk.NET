@@ -46,8 +46,6 @@ namespace Silk.NET.OpenCL.Extensions.ARM
         ImportTypeAndroidHardwareBufferArm = 0x41E2,
         [NativeName("Name", "CL_IMPORT_DMA_BUF_DATA_CONSISTENCY_WITH_HOST_ARM")]
         ImportDmaBufDataConsistencyWithHostArm = 0x41E3,
-        [NativeName("Name", "CL_IMPORT_MEMORY_WHOLE_ALLOCATION_ARM")]
-        ImportMemoryWholeAllocationArm = unchecked((int) -1),
         [NativeName("Name", "CL_IMPORT_ANDROID_HARDWARE_BUFFER_PLANE_INDEX_ARM")]
         ImportAndroidHardwareBufferPlaneIndexArm = 0x41EF,
         [NativeName("Name", "CL_IMPORT_ANDROID_HARDWARE_BUFFER_LAYER_INDEX_ARM")]
