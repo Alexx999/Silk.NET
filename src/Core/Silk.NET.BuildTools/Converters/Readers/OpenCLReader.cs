@@ -31,101 +31,16 @@ namespace Silk.NET.BuildTools.Converters.Readers
     /// </summary>
     public class OpenCLReader : IReader
     {
-        private static readonly Dictionary<string, string> Constants = new Dictionary<string, string>
+        private static readonly Dictionary<string, (string value, string type)> Constants = new Dictionary<string, (string, string)>
         {
-            // Constants
-            {"int_CL_CHAR_BIT", "8"},
-            {"int_CL_SCHAR_MAX", "127"},
-            {"int_CL_SCHAR_MIN", "-127 - 1"},
-            {"int_CL_CHAR_MAX", "127"},
-            {"int_CL_CHAR_MIN", "-127 - 1"},
-            {"int_CL_UCHAR_MAX", "255"},
-            {"short_CL_SHRT_MAX", "32767"},
-            {"short_CL_SHRT_MIN", "-32767 - 1"},
-            {"ushort_CL_USHRT_MAX", "65535"},
-            {"int_CL_INT_MAX", "2147483647"},
-            {"int_CL_INT_MIN", "-2147483647 - 1"},
-            {"uint_CL_UINT_MAX", "0xffffffffU"},
-            {"long_CL_LONG_MAX", "0x7FFFFFFFFFFFFFFFL"},
-            {"long_CL_LONG_MIN", "-0x7FFFFFFFFFFFFFFFL - 1L"},
-            {"ulong_CL_ULONG_MAX", "0xFFFFFFFFFFFFFFFFUL"},
-            {"float_CL_FLT_DIG", "6"},
-            {"float_CL_FLT_MANT_DIG", "24"},
-            {"float_CL_FLT_MAX_10_EXP", "+38"},
-            {"float_CL_FLT_MAX_EXP", "+128"},
-            {"float_CL_FLT_MIN_10_EXP", "-37"},
-            {"float_CL_FLT_MIN_EXP", "-125"},
-            {"float_CL_FLT_RADIX", "2"},
-            {"float_CL_FLT_MAX", "340282346638528859811704183484516925440.0f"},
-            {"float_CL_FLT_MIN", "1.175494350822287507969e-38f"},
-            {"float_CL_FLT_EPSILON", "1.1920928955078125e-7f"},
-            {"short_CL_HALF_DIG", "3"},
-            {"short_CL_HALF_MANT_DIG", "11"},
-            {"short_CL_HALF_MAX_10_EXP", "+4"},
-            {"short_CL_HALF_MAX_EXP", "+16"},
-            {"short_CL_HALF_MIN_10_EXP", "-4"},
-            {"short_CL_HALF_MIN_EXP", "-13"},
-            {"short_CL_HALF_RADIX", "2"},
-            {"short_CL_HALF_MAX", "unchecked((short)65504.0f)"},
-            {"short_CL_HALF_MIN", "unchecked((short)6.103515625e-05f)"},
-            {"short_CL_HALF_EPSILON", "unchecked((short)9.765625e-04f)"},
-            {"double_CL_DBL_DIG", "15"},
-            {"double_CL_DBL_MANT_DIG", "53"},
-            {"double_CL_DBL_MAX_10_EXP", "+308"},
-            {"double_CL_DBL_MAX_EXP", "+1024"},
-            {"double_CL_DBL_MIN_10_EXP", "-307"},
-            {"double_CL_DBL_MIN_EXP", "-1021"},
-            {"double_CL_DBL_RADIX", "2"},
-            {"double_CL_DBL_MAX", "1.7976931348623158e+308"},
-            {"double_CL_DBL_MIN", "2.225073858507201383090e-308"},
-            {"double_CL_DBL_EPSILON", "2.220446049250313080847e-16"},
-            {"double_CL_M_E", "2.7182818284590452354"},
-            {"double_CL_M_LOG2E", "1.4426950408889634074"},
-            {"double_CL_M_LOG10E", "0.43429448190325182765"},
-            {"double_CL_M_LN2", "0.69314718055994530942"},
-            {"double_CL_M_LN10", "2.30258509299404568402"},
-            {"double_CL_M_PI", "3.14159265358979323846"},
-            {"double_CL_M_PI_2", "1.57079632679489661923"},
-            {"double_CL_M_PI_4", "0.78539816339744830962"},
-            {"double_CL_M_1_PI", "0.31830988618379067154"},
-            {"double_CL_M_2_PI", "0.63661977236758134308"},
-            {"double_CL_M_2_SQRTPI", "1.12837916709551257390"},
-            {"double_CL_M_SQRT2", "1.41421356237309504880"},
-            {"double_CL_M_SQRT1_2", "0.70710678118654752440"},
-            {"float_CL_M_E_F", "2.718281828f"},
-            {"float_CL_M_LOG2E_F", "1.442695041f"},
-            {"float_CL_M_LOG10E_F", "0.434294482f"},
-            {"float_CL_M_LN2_F", "0.693147181f"},
-            {"float_CL_M_LN10_F", "2.302585093f"},
-            {"float_CL_M_PI_F", "3.141592654f"},
-            {"float_CL_M_PI_2_F", "1.570796327f"},
-            {"float_CL_M_PI_4_F", "0.785398163f"},
-            {"float_CL_M_1_PI_F", "0.318309886f"},
-            {"float_CL_M_2_PI_F", "0.636619772f"},
-            {"float_CL_M_2_SQRTPI_F", "1.128379167f"},
-            {"float_CL_M_SQRT2_F", "1.414213562f"},
-            {"float_CL_M_SQRT1_2_F", "0.707106781f"},
-            {"float_CL_NAN", "float.NaN"},
-            {"float_CL_HUGE_VALF", "(float) 1e50"},
-            {"double_CL_HUGE_VAL", "double.PositiveInfinity"},
-            {"float_CL_MAXFLOAT", "float.MaxValue"},
-            {"float_CL_INFINITY", "float.PositiveInfinity"},
-            
-            // MiscNumbers
-            {"int_CL_PROPERTIES_LIST_END_EXT", "0"},
-            {"int_CL_PARTITION_BY_COUNTS_LIST_END_EXT", "0"},
-            {"int_CL_DEVICE_PARTITION_BY_COUNTS_LIST_END", "0x0"},
-            {"int_CL_PARTITION_BY_NAMES_LIST_END_EXT", "0 - 1"},
-            {"int_CL_PARTITION_BY_NAMES_LIST_END_INTEL", "-1"},
-            
-            // Versioning
-            {"int_CL_VERSION_MAJOR_BITS", "10"},
-            {"int_CL_VERSION_MINOR_BITS", "10"},
-            {"int_CL_VERSION_PATCH_BITS", "12"},
-            {"int_CL_NAME_VERSION_MAX_NAME_SIZE", "64"},
-            
+            {"CL_NAN", ("float.NaN", "float")},
+            {"CL_HUGE_VALF", ("float.PositiveInfinity", "float")},
+            {"CL_HUGE_VAL", ("double.PositiveInfinity", "double")},
+            {"CL_MAXFLOAT", ("float.MaxValue", "float")},
+            {"CL_INFINITY", ("float.PositiveInfinity", "float")},
+            {"CL_IMPORT_MEMORY_WHOLE_ALLOCATION_ARM", ("ulong.MaxValue", "nuint")},
+
         };
-        
         /// <inheritdoc />
         public object Load(Stream stream)
         {
@@ -136,7 +51,6 @@ namespace Silk.NET.BuildTools.Converters.Readers
         public IEnumerable<Struct> ReadStructs(object obj, BindTask task)
         {
             var xd = (XDocument) obj;
-            
             var rawStructs = xd.Element("registry")?.Element("types")?.Elements("type")
                 .Where(type => type.HasCategoryAttribute("struct"))
                 .Select(StructureDefinition.CreateFromXml)
@@ -848,7 +762,7 @@ namespace Silk.NET.BuildTools.Converters.Readers
                 .DistinctBy(x => x.Attribute("name").Value)
                 .Where
                 (
-                    x => x.Parent.Attribute("name").Value != "Constants" &&
+                    x => !x.Parent.Attribute("name").Value.StartsWith("Constants") &&
                          x.Parent.Attribute("name").Value != "MiscNumbers"
                 )
                 .ToDictionary
@@ -909,7 +823,7 @@ namespace Silk.NET.BuildTools.Converters.Readers
                         : null;
                     var tokens = requirement.Elements("enum")
                         .Attributes("name")
-                        .Where(x => !Constants.ContainsKey(x.Value) && allEnums.ContainsKey(x.Value))
+                        .Where(x => allEnums.ContainsKey(x.Value))
                         .Select
                         (
                             token => new Token
@@ -918,10 +832,7 @@ namespace Silk.NET.BuildTools.Converters.Readers
                                 Doc = string.Empty,
                                 Name = Naming.Translate(TrimName(token.Value, task), task.FunctionPrefix),
                                 NativeName = token.Value,
-                                Value = allEnums.ContainsKey
-                                    (token.Value)
-                                    ? allEnums[token.Value].Item1
-                                    : FormatToken(Constants[token.Value].ToString())
+                                Value = allEnums[token.Value].Item1
                             }
                         ).ToList();
 
@@ -1039,11 +950,6 @@ namespace Silk.NET.BuildTools.Converters.Readers
                 return parts[0];
             }
 
-            if(parts[0] == "Constants")
-            {
-                return parts[1];
-            }
-
             return value.Replace('.', '_');
         }
 
@@ -1077,22 +983,68 @@ namespace Silk.NET.BuildTools.Converters.Readers
         /// <inheritdoc />
         public IEnumerable<Constant> ReadConstants(object obj, BindTask task)
         {
-            return Constants.Select
+            var doc = obj as XDocument;
+            Debug.Assert(doc != null, $"{nameof(doc)} != null");
+
+            var registry = doc.Element("registry");
+            Debug.Assert(registry != null, $"{nameof(registry)} != null");
+
+            var constants = new List<(string, string)>(registry
+                .Elements("enums")
+                .Where(x => x.Attribute("name").Value.StartsWith("Constants"))
+                .Elements("enum")
+                .Select(x => (x.Attribute("name").Value, x.Attribute("value").Value)));
+
+            return constants.Select
             (
-                x => new Constant
+                x =>
                 {
-                    Name = Naming.Translate(TrimName(GetName(x.Key, out var type), task), task.FunctionPrefix),
-                    NativeName = GetName(x.Key, out _),
-                    Type = new Type {Name = type}, Value = x.Value.ToString()
-                }
-            );
+                    var type = GetConstType(x.Item1);
+                    var value = GetConstValue(x.Item1, x.Item2, type);
+                    if (Constants.TryGetValue(x.Item1, out var t))
+                    {
+                        value = t.value;
+                        type = t.type;
+                    }
+
+                    return new Constant
+                    {
+                        Name = Naming.Translate(TrimName(x.Item1, task), task.FunctionPrefix),
+                        NativeName = x.Item1,
+                        Type = new Type { Name = type },
+                        Value = value
+                    };
+                });
         }
 
-        private static string GetName(string xKey, out string type)
+        private string GetConstValue(string name, string origValue, string type)
         {
-            var split = xKey.Split('_');
-            type = split[0];
-            return string.Join("_", new ArraySegment<string>(split, 1, split.Length - 1));
+            if (name.StartsWith("CL_HALF")) return origValue;
+
+            if (name.EndsWith("_MIN")) return $"{type}.MinValue";
+            if (name.EndsWith("_MAX")) return $"{type}.MaxValue";
+
+            return origValue;
+        }
+
+        private string GetConstType(string name)
+        {
+            if (name.StartsWith("CL_CHAR")) return "sbyte";
+            if (name.StartsWith("CL_UCHAR")) return "byte";
+            if (name.StartsWith("CL_SCHAR")) return "sbyte";
+            if (name.StartsWith("CL_SHRT")) return "short";
+            if (name.StartsWith("CL_USHRT")) return "ushort";
+            if (name.StartsWith("CL_USHRT")) return "ushort";
+            if (name.StartsWith("CL_UINT")) return "uint";
+            if (name.StartsWith("CL_INT")) return "int";
+            if (name.StartsWith("CL_ULONG")) return "ulong";
+            if (name.StartsWith("CL_LONG")) return "long";
+            if (name.StartsWith("CL_HALF")) return "float";
+            if (name.StartsWith("CL_FLT")) return "float";
+            if (name.StartsWith("CL_DBL")) return "double";
+            if (name.StartsWith("CL_M") && name.EndsWith("_F")) return "float";
+            if (name.StartsWith("CL_M")) return "double";
+            return "int";
         }
 
         private static string FormatToken(string token)
@@ -1101,9 +1053,6 @@ namespace Silk.NET.BuildTools.Converters.Readers
             {
                 case null:
                     return null;
-                case "SIZE_MAX":
-                    // TODO stop treating OpenCL constants as enums
-                    return unchecked((int)18446744073709551615).ToString();
                 case "CL_TRUE":
                     return 1.ToString();
                 case "CL_FALSE":
